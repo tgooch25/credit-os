@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Credit OS">
+<meta name="theme-color" content="#06080f">
+<title>Credit OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06080f;--s1:#0c1220;--s2:#101828;--grn:#0fd472;--cyn:#00bcd4;--pur:#a855f7;--blu:#60a5fa;--amb:#f59e0b;--red:#f87171;--txt:#dde8f4;--mut:#3a5068;--b0:rgba(255,255,255,0.05);--b1:rgba(255,255,255,0.09);}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{background:#06080f;}
+body{background:var(--bg);min-height:100vh;font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:var(--txt);-webkit-font-smoothing:antialiased;}
+.app{max-width:680px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+.hdr{padding:16px 18px 12px;padding-top:max(16px,env(safe-area-inset-top));background:linear-gradient(160deg,#0d1828,#06080f);border-bottom:1px solid var(--b0);display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;z-index:100;}
+.title{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:var(--cyn);letter-spacing:3px;}
+.sub{font-size:10px;color:var(--mut);letter-spacing:1px;margin-top:4px;}
+.hdr-r{text-align:right;}
+.hdate{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--grn);}
+.hfee{font-size:10px;color:var(--amb);margin-top:3px;}
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--b0);background:var(--s1);position:sticky;top:63px;z-index:99;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:11px 15px;font-size:11px;font-weight:500;color:var(--mut);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0;letter-spacing:.3px;user-select:none;}
+.tab.on{color:var(--cyn);border-bottom-color:var(--cyn);}
+#pg{padding:16px;flex:1;}
+.sec{font-size:10px;font-weight:600;letter-spacing:1.4px;color:var(--mut);text-transform:uppercase;margin:16px 0 9px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:'';flex:1;height:1px;background:var(--b0);}
+.crd{background:var(--s1);border:1px solid var(--b0);border-radius:12px;margin-bottom:8px;display:flex;overflow:hidden;}
+.crd.ison{border-color:rgba(15,212,114,.25);background:rgba(15,212,114,.028);}
+.crd.wcrd{border-color:rgba(245,158,11,.22);}
+.crd.dcrd{border-color:rgba(248,113,113,.22);}
+.crd.done{opacity:.4;}
+.crd.skip{opacity:.28;}
+.bar{width:3px;flex-shrink:0;}
+.ba{background:linear-gradient(180deg,#a855f7,rgba(168,85,247,.15));}
+.bc{background:linear-gradient(180deg,#60a5fa,rgba(96,165,250,.15));}
+.bp{background:linear-gradient(180deg,#0fd472,rgba(15,212,114,.15));}
+.bon{background:linear-gradient(180deg,#0fd472,rgba(15,212,114,.4))!important;}
+.crow{display:flex;align-items:center;gap:12px;padding:13px 14px;flex:1;}
+.chk{width:22px;height:22px;border:1.5px solid var(--mut);border-radius:6px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;user-select:none;}
+.chk.on{border-color:var(--grn);background:rgba(15,212,114,.13);color:var(--grn);}
+.chk.lk{border-color:rgba(15,212,114,.25);background:rgba(15,212,114,.06);color:rgba(15,212,114,.45);cursor:default;}
+.chk.na{border-color:var(--b1);cursor:default;color:var(--mut);font-size:10px;}
+.ci{flex:1;min-width:0;}
+.ptags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;}
+.cn{font-size:13px;font-weight:500;color:var(--txt);}
+.cd{font-size:11px;color:var(--mut);margin-top:3px;line-height:1.45;}
+.cm{text-align:right;flex-shrink:0;}
+.cv{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--grn);}
+.cr{font-size:9px;color:var(--mut);margin-top:3px;}
+.pill{font-size:9px;font-weight:600;letter-spacing:.3px;padding:2px 8px;border-radius:20px;display:inline-block;}
+.pa{background:rgba(168,85,247,.12);color:#c084fc;border:.5px solid rgba(168,85,247,.25);}
+.pc{background:rgba(96,165,250,.12);color:#93c5fd;border:.5px solid rgba(96,165,250,.25);}
+.pauto{background:rgba(0,188,212,.1);color:#67e8f9;border:.5px solid rgba(0,188,212,.2);}
+.pwarn{background:rgba(245,158,11,.1);color:#fbbf24;border:.5px solid rgba(245,158,11,.25);}
+.pdead{background:rgba(248,113,113,.1);color:#fca5a5;border:.5px solid rgba(248,113,113,.25);}
+.pskip{background:rgba(50,65,85,.4);color:var(--mut);border:.5px solid rgba(50,65,85,.5);}
+.pdone{background:rgba(15,212,114,.08);color:#6ee7b7;border:.5px solid rgba(15,212,114,.2);}
+.ppers{background:rgba(15,212,114,.1);color:var(--grn);border:.5px solid rgba(15,212,114,.2);}
+.dg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px;}
+.ds{background:var(--s1);border:1px solid var(--b0);border-radius:12px;padding:13px 11px;}
+.dl{font-size:9px;font-weight:600;letter-spacing:1.2px;color:var(--mut);text-transform:uppercase;margin-bottom:7px;}
+.dv{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;line-height:1;}
+.dv.g{color:var(--grn);}
+.dv.c{color:var(--cyn);}
+.dv.w{color:var(--amb);}
+.dsub{font-size:10px;color:var(--mut);margin-top:5px;}
+.alrt{border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:11px;line-height:1.75;}
+.at{font-weight:600;font-size:11px;margin-bottom:5px;}
+.awarn{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);color:#fcd34d;}
+.aact{background:rgba(0,188,212,.05);border:1px solid rgba(0,188,212,.15);color:var(--cyn);}
+.adead{background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.2);color:#fca5a5;}
+.pbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,188,212,.06);border:1px solid rgba(0,188,212,.14);border-radius:20px;padding:6px 14px;font-size:11px;color:var(--cyn);margin-bottom:14px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--cyn);flex-shrink:0;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.2;}}
+.oform{background:var(--s1);border:1px solid var(--b0);border-radius:12px;padding:16px;margin-bottom:14px;}
+.oflbl{font-size:11px;font-weight:600;color:var(--cyn);margin-bottom:12px;}
+.oi{background:var(--s2);border:1px solid var(--b1);border-radius:8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 12px;width:100%;margin-bottom:8px;outline:none;-webkit-appearance:none;appearance:none;}
+.oi::placeholder{color:var(--mut);}
+.og{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.obtn{background:rgba(0,188,212,.09);border:1px solid rgba(0,188,212,.25);color:var(--cyn);font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;padding:11px;border-radius:8px;cursor:pointer;width:100%;margin-top:8px;}
+.oitem{background:var(--s1);border:1px solid var(--b0);border-radius:12px;padding:13px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.oitem.owarn{border-color:rgba(245,158,11,.28);}
+.oitem.oexp{opacity:.6;}
+.odays{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;min-width:44px;text-align:center;line-height:1;}
+.odays.ok{color:var(--grn);}
+.odays.warn{color:var(--amb);}
+.odays.exp{color:var(--red);}
+.odel{font-size:22px;color:var(--mut);cursor:pointer;padding:4px 8px;flex-shrink:0;line-height:1;}
+.bill{background:var(--s1);border:1px solid var(--b0);border-radius:12px;margin-bottom:8px;display:flex;overflow:hidden;}
+.bill.bpd{border-color:rgba(15,212,114,.22);background:rgba(15,212,114,.02);}
+.bill.blt{border-color:rgba(248,113,113,.28);}
+.bill-inner{display:flex;align-items:center;gap:12px;padding:13px 14px;flex:1;}
+.binfo{flex:1;min-width:0;}
+.bname{font-size:13px;font-weight:500;color:var(--txt);}
+.bwho{font-size:11px;color:var(--mut);margin-top:2px;}
+.bstat{text-align:right;flex-shrink:0;}
+.bdue{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;}
+.bok{color:var(--cyn);}
+.bsoon{color:var(--amb);}
+.blt2{color:var(--red);}
+.bpd2{color:var(--grn);}
+.bpdate{font-size:9px;color:var(--mut);margin-top:2px;}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--b0);border-radius:12px;overflow:hidden;margin-bottom:12px;}
+.qcell{background:var(--s1);padding:11px 13px;}
+.qcell.qnow{background:rgba(0,188,212,.07);color:var(--cyn);}
+.qcell.qoff{color:var(--mut);}
+.qlbl{font-size:11px;font-weight:500;}
+.qsub{font-size:9px;margin-top:3px;}
+.empty{text-align:center;padding:28px 16px;color:var(--mut);font-size:12px;line-height:2;}
+.tip{font-size:11px;color:var(--mut);line-height:1.7;padding:4px 0 8px;}
+.sr{display:flex;align-items:flex-start;gap:10px;margin-top:10px;}
+.st{flex:1;}
+.sn{font-size:12px;font-weight:500;color:var(--txt);}
+.sd{font-size:11px;color:var(--mut);margin-top:2px;line-height:1.4;}
+@media(min-width:600px){.hdr{padding:20px 24px 16px;}.title{font-size:24px;}#pg{padding:20px 24px;}.tab{padding:12px 18px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div>
+      <div class="title">CREDIT OS</div>
+      <div class="sub">AMEX PLATINUM &middot; CHASE SAPPHIRE RESERVE</div>
+    </div>
+    <div class="hdr-r">
+      <div class="hdate" id="hdate">---</div>
+      <div class="hfee">&#9889; AMEX FEE DUE APR 24</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" id="t0" onclick="st('dash')">Dashboard</div>
+    <div class="tab" id="t1" onclick="st('monthly')">Monthly</div>
+    <div class="tab" id="t2" onclick="st('quarterly')">Quarterly</div>
+    <div class="tab" id="t3" onclick="st('semi')">Semi-Annual</div>
+    <div class="tab" id="t4" onclick="st('annual')">Annual</div>
+    <div class="tab" id="t5" onclick="st('offers')">Offers</div>
+    <div class="tab" id="t6" onclick="st('bills')">Bills</div>
+  </div>
+  <div id="pg"><div class="empty">Loading...</div></div>
+</div>
+<script>
+var N=new Date(),checks={},offers=[],tab='dash';
+var TABS=['dash','monthly','quarterly','semi','annual','offers','bills'];
+function sc(){try{localStorage.setItem('cos-c',JSON.stringify(checks));}catch(e){}}
+function so(){try{localStorage.setItem('cos-o',JSON.stringify(offers));}catch(e){}}
+function ld(){try{var d=localStorage.getItem('cos-c');if(d)checks=JSON.parse(d);}catch(e){checks={};}try{var d2=localStorage.getItem('cos-o');if(d2)offers=JSON.parse(d2);}catch(e){offers=[];}}
+function fmt(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}).toUpperCase();}
+function fmtS(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase();}
+function pid(cad,d){if(!d)d=N;var y=d.getFullYear(),m=d.getMonth();if(cad=='monthly')return y+'-'+(m<9?'0':'')+(m+1);if(cad=='quarterly')return y+'-Q'+(Math.floor(m/3)+1);if(cad=='semi')return y+'-H'+(m<6?'1':'2');if(cad=='annual')return''+y;return'ONCE';}
+function pl(cad){var m=N.getMonth(),y=N.getFullYear(),mn=['January','February','March','April','May','June','July','August','September','October','November','December'];if(cad=='monthly')return mn[m]+' '+y;var qn=['Jan-Mar','Apr-Jun','Jul-Sep','Oct-Dec'];if(cad=='quarterly')return'Q'+(Math.floor(m/3)+1)+' '+y+' \xb7 '+qn[Math.floor(m/3)];if(cad=='semi')return m<6?'H1 '+y+' \xb7 Jan-Jun':'H2 '+y+' \xb7 Jul-Dec';return''+y;}
+function dl(cad){var y=N.getFullYear(),m=N.getMonth(),e;if(cad=='monthly')e=new Date(y,m+1,0);else if(cad=='quarterly')e=new Date(y,(Math.floor(m/3)+1)*3,0);else if(cad=='semi')e=m<6?new Date(y,6,0):new Date(y,12,0);else e=new Date(y,12,0);return Math.max(0,Math.ceil((e-N)/86400000));}
+function isOn(id,cad){if(!checks[id])return false;if(cad=='once')return true;return pid(cad,new Date(checks[id]))==pid(cad);}
+var CR={
+monthly:[
+{id:'m1',name:'Uber Cash',card:'amex',val:'$15',detail:'Rides or Uber Eats. December = $35 total (+$20 bonus).'},
+{id:'m2',name:'Digital Entertainment',card:'amex',val:'$25',detail:'Hulu confirmed working - verify $25 credit posted each month.',auto:true},
+{id:'m3',name:'Walmart+',card:'amex',val:'~$14',detail:'Auto-billing confirmed - verify credit posts each month.',auto:true},
+{id:'m4',name:'Uber One',card:'amex',val:'$9.99',detail:'Working March 16 - free Uber One membership, auto-billed.',auto:true},
+{id:'m5',name:'Lyft Credit',card:'chase',val:'$10',detail:'Auto-applies when you pay with Sapphire Reserve in the Lyft app.',auto:true},
+{id:'m6',name:'DoorDash Promos',card:'chase',val:'$25',detail:'Open DoorDash > Promos tab. $5 restaurant + two $10 grocery/retail. Must claim manually.'},
+{id:'m7',name:'Peloton Membership',card:'chase',val:'$10',detail:'Confirm Peloton account bills to your Sapphire Reserve.',auto:true},
+{id:'m8',name:'Everand',card:'personal',val:'Use it',detail:'Use your Everand subscription this month. Best habit: read or listen on the 24th.'}
+],
+quarterly:[
+{id:'q1',name:'Resy Dining',card:'amex',val:'$100',detail:'Any Resy restaurant. Confirm staff can run card directly at table. Stacks with Chase Offers.'},
+{id:'q2',name:'Lululemon',card:'amex',val:'$75',detail:'Retail or lululemon.com. Check We Made Too Much sale section. Stacks with Chase Lululemon offer.'}
+],
+semi:[
+{id:'s1',name:'FHR / Hotel Collection',card:'amex',val:'$300',detail:'AmexTravel.com - prepaid 2-night min. Book now for any future trip including Tahoe.',urg:true},
+{id:'s2',name:'Saks Fifth Avenue',card:'amex',val:'$50',detail:'Last ever - permanently cancelled after Jun 30 2026. Use at saks.com or in-store.',last:true},
+{id:'s3',name:'StubHub / Viagogo',card:'chase',val:'$150',detail:'Any event tickets - Red Sox, concerts, sports. Buy on StubHub.com or viagogo.com.'},
+{id:'s4',name:'Exclusive Tables Dining',card:'chase',val:'$150',detail:'Fine dining via Chase + OpenTable. Great for a special dinner with Mindy.'}
+],
+annual:[
+{id:'a1',name:'Airline Fee Credit',card:'amex',val:'$200',detail:'Southwest selected. Bag fees, seat upgrades, in-flight drinks all qualify.',urg:true},
+{id:'a2',name:'CLEAR+ Renewal',card:'amex',val:'$209',detail:'Renewing this month - auto-credits within 2-4 weeks of charge posting.',auto:true},
+{id:'a3',name:'Equinox Fitness',card:'amex',val:'$300',detail:'SKIP - you have Peloton. Not worth paying for a gym you will not use.',skip:true},
+{id:'a4',name:'Oura Ring Credit',card:'amex',val:'$200',detail:'SKIP - you have RingConn. Not worth switching rings.',skip:true},
+{id:'a5',name:'The Edit - Hotel Stay 1',card:'chase',val:'$250',detail:'Chase Travel > The Edit > sort by lowest price. Prepaid 2-night min.',urg:true},
+{id:'a6',name:'The Edit - Hotel Stay 2',card:'chase',val:'$250',detail:'Second separate stay required - cannot apply both credits to same booking.',urg:true},
+{id:'a7',name:'Select Hotel Credit',card:'chase',val:'$250',detail:'2026 only - IHG/Omni/Pendry/Montage. Already redeemed.',done:true},
+{id:'a8',name:'$300 Travel Credit',card:'chase',val:'$300',detail:'Resets March 1 each year. Already fully redeemed for 2026.',done:true}
+],
+setup:[
+{id:'x1',name:'Select Southwest as Amex Airline',card:'amex',detail:'Amex app > Benefits > $200 Airline Fee Credit > Select airline > Southwest'},
+{id:'x2',name:'Activate Hyatt Explorist on Chase',card:'chase',detail:'Chase app > Benefits > World of Hyatt Explorist > Activate. Free status, 30 seconds.'},
+{id:'x3',name:'Confirm Peloton Bills to Chase',card:'chase',detail:'Peloton > Account Settings > Billing > confirm Sapphire Reserve is payment method'}
+]};
+var BL=[
+{id:'b1',name:'Chase Sapphire Reserve',person:'Tony',cadence:'autopay'},
+{id:'b2',name:'Chase',person:'Mindy',cadence:'monthly',day:24},
+{id:'b3',name:'Bank of America',person:'Tony',cadence:'monthly',day:26},
+{id:'b4',name:'Bank of America',person:'Mindy',cadence:'monthly',day:14},
+{id:'b5',name:'Amex Platinum',person:'Tony',cadence:'autopay'},
+{id:'b6',name:'Phone',person:'Tony',cadence:'monthly',day:20}
+];
+function tog(id,cad){if(isOn(id,cad)){delete checks[id];}else{checks[id]=new Date().toISOString();}sc();render();}
+function st(t){tab=t;for(var i=0;i<TABS.length;i++){var el=document.getElementById('t'+i);if(el)el.className='tab'+(TABS[i]==t?' on':'');}render();}
+function pills(c){var h='';if(c.card=='amex')h+='<span class="pill pa">AMEX</span>';else if(c.card=='chase')h+='<span class="pill pc">CHASE</span>';else h+='<span class="pill ppers">PERSONAL</span>';if(c.auto)h+='<span class="pill pauto">Auto</span>';if(c.urg)h+='<span class="pill pwarn">Action needed</span>';if(c.last)h+='<span class="pill pdead">Last ever</span>';if(c.skip)h+='<span class="pill pskip">Skip</span>';if(c.done)h+='<span class="pill pdone">Redeemed</span>';return h;}
+function barcls(c,cad){if(isOn(c.id,cad))return'bar bon';if(c.card=='amex')return'bar ba';if(c.card=='chase')return'bar bc';return'bar bp';}
+function chkh(c,cad){if(c.done)return'<div class="chk lk">&#10003;</div>';if(c.skip)return'<div class="chk na">&#8212;</div>';var on=isOn(c.id,cad);return'<div class="chk'+(on?' on':'')+'" onclick="tog(\''+c.id+'\',\''+cad+'\')">'+(on?'&#10003;':'')+'</div>';}
+function crdcls(c,cad){var cl='crd';if(c.done||c.skip)cl+=c.done?' done':' skip';else if(isOn(c.id,cad))cl+=' ison';else if(c.last)cl+=' dcrd';else if(c.urg)cl+=' wcrd';return cl;}
+function cH(c,cad){var p=pl(cad).split('\xb7')[0].trim();return'<div class="'+crdcls(c,cad)+'"><div class="'+barcls(c,cad)+'"></div><div class="crow">'+chkh(c,cad)+'<div class="ci"><div class="ptags">'+pills(c)+'</div><div class="cn">'+c.name+'</div><div class="cd">'+c.detail+'</div></div><div class="cm"><div class="cv">'+(c.val||'')+'</div><div class="cr">'+p+'</div></div></div></div>';}
+function rDash(){var ac=CR.monthly.concat(CR.quarterly).concat(CR.semi).concat(CR.annual);var cs=CR.monthly.map(function(){return'monthly';}).concat(CR.quarterly.map(function(){return'quarterly';})).concat(CR.semi.map(function(){return'semi';})).concat(CR.annual.map(function(){return'annual';}));var tot=0,done=0;for(var i=0;i<ac.length;i++){if(ac[i].skip)continue;tot++;if(isOn(ac[i].id,cs[i])||ac[i].done)done++;}var dlt=dl('monthly'),dj=Math.ceil((new Date(2026,5,30)-N)/86400000);var su=CR.setup.filter(function(c){return!isOn(c.id,'once');});var mu=CR.monthly.filter(function(c){return!isOn(c.id,'monthly')&&!c.auto;});var qu=CR.quarterly.filter(function(c){return!isOn(c.id,'quarterly');});var h1=N.getMonth()<6;var sau=h1?CR.semi.filter(function(c){return!isOn(c.id,'semi')&&!c.done;}):[];var au=CR.annual.filter(function(c){return!isOn(c.id,'annual')&&!c.skip&&!c.done&&c.urg;});var h='<div class="dg"><div class="ds"><div class="dl">Tracked</div><div class="dv g">'+done+'/'+tot+'</div><div class="dsub">credits logged</div></div><div class="ds"><div class="dl">Month end</div><div class="dv c">'+dlt+'d</div><div class="dsub">days left</div></div><div class="ds"><div class="dl">Jun 30</div><div class="dv '+(dj<=30?'w':'c')+'">'+dj+'d</div><div class="dsub">H1 closes</div></div></div>';if(su.length){h+='<div class="alrt aact"><div class="at">One-time setup remaining</div>';for(var i2=0;i2<su.length;i2++){var c2=su[i2];var on2=isOn(c2.id,'once');h+='<div class="sr"><div class="chk'+(on2?' on':'')+'" onclick="tog(\''+c2.id+'\',\'once\')">'+(on2?'&#10003;':'')+'</div><div class="st"><div class="sn">'+c2.name+' <span class="pill '+(c2.card=='amex'?'pa':'pc')+'" style="margin-left:4px;">'+c2.card.toUpperCase()+'</span></div><div class="sd">'+c2.detail+'</div></div></div>';}h+='</div>';}if(sau.length||au.length){h+='<div class="alrt awarn"><div class="at">&#9889; Jun 30 deadline &mdash; '+dj+' days away</div>';var ui=sau.concat(au);for(var i3=0;i3<ui.length;i3++)h+='<div style="margin-top:3px;">&middot; '+ui[i3].name+' <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:#0fd472;margin-left:4px;">'+ui[i3].val+'</span></div>';h+='</div>';}if(mu.length){h+='<div class="alrt aact"><div class="at">This month &middot; '+dlt+' days left</div>';for(var i4=0;i4<mu.length;i4++){var cc=mu[i4].card;h+='<div style="margin-top:3px;">&middot; '+mu[i4].name+' <span class="pill '+(cc=='amex'?'pa':cc=='chase'?'pc':'ppers')+'" style="margin-left:4px;">'+cc.toUpperCase()+'</span></div>';}h+='</div>';}if(qu.length){var qd=dl('quarterly');h+='<div class="alrt aact"><div class="at">This quarter &middot; '+qd+' days left</div>';for(var i5=0;i5<qu.length;i5++)h+='<div style="margin-top:3px;">&middot; '+qu[i5].name+' <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:#0fd472;margin-left:4px;">'+qu[i5].val+'</span></div>';h+='</div>';}if(!su.length&&!sau.length&&!au.length&&!mu.length&&!qu.length)h+='<div class="empty" style="color:#0fd472;">All credits on track.<br><span style="color:#3a5068;font-size:11px;">No urgent items right now.</span></div>';return h;}
+function rMonthly(){var dlt=dl('monthly'),dec=N.getMonth()==11;var h='<div class="pbadge"><div class="dot"></div>'+pl('monthly')+' &middot; '+dlt+' days left</div>';if(dec)h+='<div class="alrt awarn"><div class="at">December bonus active</div>Amex Uber Cash is $35 this month &mdash; extra $20. Do not miss it.</div>';h+='<div class="sec">Action required</div>';for(var i=0;i<CR.monthly.length;i++){if(!CR.monthly[i].auto)h+=cH(CR.monthly[i],'monthly');}h+='<div class="sec">Autopilot &mdash; verify posting</div>';for(var i2=0;i2<CR.monthly.length;i2++){if(CR.monthly[i2].auto)h+=cH(CR.monthly[i2],'monthly');}return h;}
+function rQuarterly(){var dlt=dl('quarterly'),q=Math.floor(N.getMonth()/3);var h='<div class="pbadge"><div class="dot"></div>'+pl('quarterly')+' &middot; '+dlt+' days left</div>';for(var i=0;i<CR.quarterly.length;i++)h+=cH(CR.quarterly[i],'quarterly');h+='<div class="sec">Quarter schedule</div><div class="qgrid">';var qn=['Q1 &middot; Jan-Mar','Q2 &middot; Apr-Jun','Q3 &middot; Jul-Sep','Q4 &middot; Oct-Dec'];for(var i2=0;i2<4;i2++)h+='<div class="qcell '+(i2==q?'qnow':'qoff')+'"><div class="qlbl">'+qn[i2]+'</div><div class="qsub">'+(i2==q?'Current quarter':'$175 resets')+'</div></div>';h+='</div><div class="tip">Tip: Chase Offers Lululemon cashback stacks with your $75 quarterly credit.</div>';return h;}
+function rSemi(){var dlt=dl('semi'),h1=N.getMonth()<6;var h='<div class="pbadge"><div class="dot"></div>'+pl('semi')+' &middot; '+dlt+' days left</div>';if(h1)h+='<div class="alrt adead"><div class="at">Saks benefit permanently cancelled after Jun 30</div>Last $50 credit that will ever exist on this card. Use at saks.com before June 30 2026.</div>';for(var i=0;i<CR.semi.length;i++){var c=CR.semi[i];if(c.last&&!h1){h+='<div class="crd skip"><div class="bar ba"></div><div class="crow"><div class="chk na">&#8212;</div><div class="ci"><div class="ptags"><span class="pill pa">AMEX</span><span class="pill pdead">Cancelled</span></div><div class="cn">'+c.name+'</div><div class="cd">This benefit no longer exists after June 30 2026.</div></div></div></div>';}else{h+=cH(c,'semi');}}return h;}
+function rAnnual(){var h='<div class="pbadge"><div class="dot"></div>'+pl('annual')+' &middot; '+dl('annual')+' days left</div>';h+='<div class="sec">Amex Platinum</div>';for(var i=0;i<CR.annual.length;i++){if(CR.annual[i].card=='amex')h+=cH(CR.annual[i],'annual');}h+='<div class="sec">Chase Sapphire Reserve</div>';for(var i2=0;i2<CR.annual.length;i2++){if(CR.annual[i2].card=='chase')h+=cH(CR.annual[i2],'annual');}h+='<div class="sec">Anniversary resets</div>';h+='<div class="crd"><div class="bar bc"></div><div class="crow"><div class="chk lk">&#9889;</div><div class="ci"><div class="ptags"><span class="pill pc">CHASE</span><span class="pill pauto">Auto</span></div><div class="cn">$300 Travel Credit</div><div class="cd">Resets March 1 each year (card anniversary). Auto-applies to first travel charges.</div></div><div class="cm"><div class="cv">$300</div><div class="cr">Mar 1 reset</div></div></div></div>';h+='<div class="crd"><div class="bar ba"></div><div class="crow"><div class="chk lk">&#9889;</div><div class="ci"><div class="ptags"><span class="pill pa">AMEX</span></div><div class="cn">Annual Fee Review</div><div class="cd">$895 due April 24. Confirm Southwest selected. Verify Hulu, Walmart+, Uber One billing to Platinum.</div></div><div class="cm"><div class="cv">Apr 24</div><div class="cr">Annual</div></div></div></div>';return h;}
+function rOffers(){var h='<div class="oform"><div class="oflbl">Log a new offer</div><input class="oi" id="oname" placeholder="Offer name (e.g. Lululemon 10% back)" /><div class="og" style="margin-bottom:8px;"><select class="oi" id="ocard" style="margin-bottom:0;background:#101828;color:#dde8f4;"><option value="amex">Amex Platinum</option><option value="chase">Chase Reserve</option></select><input class="oi" id="ocb" placeholder="Amount (e.g. 10% / $30)" style="margin-bottom:0;" /></div><input class="oi" id="oexp" type="date" /><button class="obtn" onclick="addOffer()">+ Add offer to tracker</button></div><div class="sec">Active offers</div>';if(!offers.length){h+='<div class="empty">No offers tracked yet.<br><span style="font-size:11px;">Log offers from your Amex or Chase app above.<br>Enable app notifications to catch new offers early.</span></div>';return h;}var sr=offers.slice().sort(function(a,b){return new Date(a.expiry)-new Date(b.expiry);});for(var i=0;i<sr.length;i++){var o=sr[i];var d=Math.ceil((new Date(o.expiry)-N)/86400000);var cls=d<0?'exp':d<=7?'warn':'ok';h+='<div class="oitem '+(d<0?'oexp':d<=7?'owarn':'')+'"><div style="text-align:center;flex-shrink:0;min-width:44px;"><div class="odays '+cls+'">'+(d<0?'EXP':d)+'</div><div style="font-size:9px;color:#3a5068;margin-top:2px;">'+(d<0?'expired':'days')+'</div></div><div style="flex:1;min-width:0;"><div class="ptags" style="margin-bottom:4px;"><span class="pill '+(o.card=='amex'?'pa':'pc')+'">'+o.card.toUpperCase()+'</span></div><div style="font-size:13px;font-weight:500;color:#dde8f4;">'+o.name+'</div><div style="font-family:JetBrains Mono,monospace;font-size:14px;font-weight:700;color:#0fd472;margin-top:3px;">'+o.cb+'</div><div style="font-size:9px;color:#3a5068;margin-top:3px;">Exp: '+new Date(o.expiry).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}).toUpperCase()+'</div></div><div class="odel" onclick="delOffer(\''+o.id+'\')">&times;</div></div>';}return h;}
+function rBills(){var m=N.getMonth(),y=N.getFullYear(),td=N.getDate();var mn=['January','February','March','April','May','June','July','August','September','October','November','December'];var h='<div class="pbadge"><div class="dot"></div>Payment tracker &middot; '+mn[m]+' '+y+'</div><div class="sec">Bills this month</div>';for(var i=0;i<BL.length;i++){var b=BL[i];var paid=isOn(b.id,'monthly');var pd=paid&&checks[b.id]?new Date(checks[b.id]):null;var ds='',dc='bok',late=false;var bc=b.person=='Tony'?'bar bc':'bar ba';if(paid)bc='bar bon';if(b.cadence=='autopay'){ds=paid?'Verified':'Verify autopay';dc=paid?'bpd2':'bok';}else{var du=b.day-td;late=!paid&&du<0;if(paid){ds='Paid';dc='bpd2';}else if(du<0){ds=Math.abs(du)+'d overdue';dc='blt2';}else if(du==0){ds='Due today';dc='bsoon';}else if(du<=3){ds='Due in '+du+'d';dc='bsoon';}else{ds='Due '+b.day+'th';dc='bok';}}var sub=b.person+(b.cadence=='autopay'?' &middot; Autopay':(b.day?' &middot; Due '+b.day+'th':''));h+='<div class="bill'+(paid?' bpd':late?' blt':'')+'"><div class="'+bc+'"></div><div class="bill-inner"><div class="chk'+(paid?' on':'')+'" onclick="tog(\''+b.id+'\',\'monthly\')">'+(paid?'&#10003;':'')+'</div><div class="binfo"><div class="bname">'+b.name+'</div><div class="bwho">'+sub+'</div></div><div class="bstat"><div class="bdue '+dc+'">'+ds+'</div>'+(pd?'<div class="bpdate">Marked '+fmtS(pd)+'</div>':'')+'</div></div></div>';}h+='<div class="tip">Checkboxes reset on the 1st of each month. Tapping records today\'s date as confirmation.</div>';return h;}
+function addOffer(){var n=document.getElementById('oname'),c=document.getElementById('ocard'),cb=document.getElementById('ocb'),e=document.getElementById('oexp');if(!n||!e||!n.value.trim()||!e.value)return;offers.push({id:''+Date.now(),name:n.value.trim(),card:c.value,cb:cb.value.trim()||'See offer',expiry:e.value});so();n.value='';cb.value='';e.value='';render();}
+function delOffer(id){offers=offers.filter(function(o){return o.id!=id;});so();render();}
+function render(){var el=document.getElementById('pg');if(!el)return;try{var fns={dash:rDash,monthly:rMonthly,quarterly:rQuarterly,semi:rSemi,annual:rAnnual,offers:rOffers,bills:rBills};el.innerHTML=(fns[tab]||rDash)();}catch(err){el.innerHTML='<div class="empty" style="color:#f87171;">Display error: '+err.message+'<br><br><span style="font-size:10px;color:#3a5068;">Please open in Safari for best results.</span></div>';}}
+try{document.getElementById('hdate').textContent=fmt(N);}catch(e){}
+ld();render();
+</script>
+</body>
+</html>
